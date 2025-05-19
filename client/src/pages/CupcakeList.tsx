@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
-/* ************************************************************************* */
 type CupcakeType = {
   id: number;
   accessory_id: string;
@@ -11,8 +10,15 @@ type CupcakeType = {
   color3: string;
   name: string;
 };
+
+type AccessoryType = {
+  id: string;
+  name: string;
+  slug: string;
+};
 function CupcakeList() {
   const [cupcakes, setCupcakes] = useState<CupcakeType[]>([]);
+  const [accessories, setAccessories] = useState<AccessoryType[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -21,11 +27,18 @@ function CupcakeList() {
         console.info("Cupcakes", data);
         setCupcakes(data);
       })
-      .catch((error) => console.error("Erreur :", error));
+      .catch((error) => console.error("Erreur Cupcakes", error));
   }, []);
 
-  // Step 3: get all accessories
-
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((res) => res.json())
+      .then((data) => {
+        console.info("Accessoires", data);
+        setAccessories(data);
+      })
+      .catch((error) => console.error("Erreur Accessoires", error));
+  }, []);
   // Step 5: create filter state
 
   return (
@@ -37,7 +50,12 @@ function CupcakeList() {
           Filter by{" "}
           <select id="cupcake-select">
             <option value="">---</option>
-            {/* Step 4: add an option for each accessory */}
+            {accessories.map((accessory) => (
+              <option key={accessory.id} value={accessory.id}>
+                {" "}
+                {accessory.name}
+              </option>
+            ))}
           </select>
         </label>
       </form>
