@@ -32,16 +32,6 @@ const sampleCupcakes: CupcakeArray = [
   },
 ];
 
-type cupcakesType = {
-  id: number;
-  accessory_id: string;
-  accessory: string;
-  color1: string;
-  color2: string;
-  color3: string;
-  name: string;
-};
-
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
@@ -49,7 +39,7 @@ type cupcakesType = {
 function CupcakeList() {
   // Step 1: get all cupcakes
 
-  const [cupcakes, setCupcakes] = useState<cupcakesType[] | null>(null);
+  const [cupcakes, setCupcakes] = useState<Cupcake[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -59,7 +49,7 @@ function CupcakeList() {
         }
         return response.json();
       })
-      .then((data: cupcakesType[]) => setCupcakes(data))
+      .then((data: Cupcake[]) => setCupcakes(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -83,7 +73,14 @@ function CupcakeList() {
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */}
+        {cupcakes ? (
+          cupcakes.map((c) =>(
+            <Cupcake key={c.id} data={c}
+            />
+          ))
+        ) : (
+          <h2>Loading, please wait a second ..</h2>
+        )}
         {/* Step 5: filter cupcakes before repeating */}
         <li className="cupcake-item">
           <Cupcake data={sampleCupcakes[0]} />
