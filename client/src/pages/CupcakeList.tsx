@@ -44,18 +44,29 @@ type data = {
   color2: string;
   color3: string;
 };
+type AccessoryArray = { id: number; name: string; slug: string };
 
 function CupcakeList() {
   const [list, setList] = useState<data[]>([]);
+  const [accessories, setAccessories] = useState<AccessoryArray[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
       .then((response) => response.json())
       .then((data) => setList(data))
-      .catch((error) => console.log(error));
+      .catch(() => {
+        "Erreur de chargement";
+      });
   }, []);
-  // Step 1: get all cupcakes
 
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((response) => response.json())
+      .then((data) => setAccessories(data))
+      .catch(() => {
+        "Erreur de chargement";
+      });
+  }, []);
   // Step 3: get all accessories
 
   // Step 5: create filter state
@@ -78,6 +89,7 @@ function CupcakeList() {
           }}
         />
       ))}
+
       <form className="center">
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
@@ -85,6 +97,11 @@ function CupcakeList() {
           <select id="cupcake-select">
             <option value="">---</option>
             {/* Step 4: add an option for each accessory */}
+            {accessories.map((a) => (
+              <option value="name" key={a.id}>
+                {a.name}
+              </option>
+            ))}
           </select>
         </label>
       </form>
