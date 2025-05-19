@@ -39,6 +39,7 @@ const sampleCupcakes: CupcakeArray = [
 function CupcakeList() {
   // Step 1: get all cupcakes
 
+  type AccessoryArray = { id: number; name: string; slug: string }[];
   const [cupcakes, setCupcakes] = useState<Cupcake[]>([]);
 
   useEffect(() => {
@@ -51,7 +52,16 @@ function CupcakeList() {
   }, []);
 
   // Step 3: get all accessories
+  const [, setAccessories] = useState<AccessoryArray>([]);
 
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((response) => response.json())
+      .then((data) => {
+        setAccessories(data);
+        console.info(data);
+      });
+  }, []);
   // Step 5: create filter state
 
   return (
