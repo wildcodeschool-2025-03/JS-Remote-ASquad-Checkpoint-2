@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
+type CupcakeType = {
+  id: number;
+  accessory_id: string;
+  accessory: string;
+  color1: string;
+  color2: string;
+  color3: string;
+  name: string;
+};
 /* ************************************************************************* */
-const sampleCupcakes: CupcakeArray = [
+/*
+ const sampleCupcakes: CupcakeArray = [
   {
     id: 10,
     accessory_id: "4",
@@ -31,13 +41,13 @@ const sampleCupcakes: CupcakeArray = [
     name: "Sweden",
   },
 ];
-
+*/
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
 
 function CupcakeList() {
-  const [cupCakes, setCupcakes] = useState("");
+  const [cupCakes, setCupcakes] = useState<CupcakeType[] | null>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -68,7 +78,9 @@ function CupcakeList() {
         {/* Step 2: repeat this block for each cupcake */}
         {/* Step 5: filter cupcakes before repeating */}
         <li className="cupcake-item">
-          <Cupcake data={sampleCupcakes[0]} />
+          {cupCakes?.map((c) => (
+            <Cupcake key={c.id} data={c} />
+          ))}
         </li>
         {/* end of block */}
       </ul>
