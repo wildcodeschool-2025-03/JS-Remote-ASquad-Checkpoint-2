@@ -86,7 +86,7 @@ function CupcakeList() {
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select 
+          <select
             id="cupcake-select"
             onChange={(e) => setSelectedAccessory(e.target.value)}
           >

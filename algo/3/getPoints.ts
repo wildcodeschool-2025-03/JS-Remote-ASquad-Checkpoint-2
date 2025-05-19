@@ -12,7 +12,16 @@ Pour exemple, si ta fonction recevait le tableau ci-dessous en paramètre, tu de
 
 function getPoints(results: string[]): number {
   // Ton code ici !
-  return 0;
+  let count = 0;
+  for (const result of results) {
+    if (result[0] > result[2]) {
+      count += 3;
+    } else if (result[0] === result[2]) {
+      count += 1;
+    }
+
+  }
+  return count;
 }
 
 export default getPoints;
