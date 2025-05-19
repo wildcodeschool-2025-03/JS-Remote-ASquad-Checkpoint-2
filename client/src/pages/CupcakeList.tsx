@@ -3,6 +3,9 @@ import Cupcake from "../components/Cupcake";
 
 /* ************************************************************************* */
 
+type AccessoryArray = { id: number; name: string; slug: string }[];
+
+
 const sampleCupcakes: CupcakeArray = [
   {
     id: 10,
@@ -39,6 +42,7 @@ const sampleCupcakes: CupcakeArray = [
 
 function CupcakeList() {
   const [cupcakes, setCupcakes] = useState<Cupcake[]>([]);
+  const [accessories, setAccessories] = useState<AccessoryArray[]>([])
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -49,7 +53,16 @@ function CupcakeList() {
       });
   }, []);
 
-  console.log(cupcakes);
+  useEffect( () => {
+    fetch("http://localhost:3310/api/accessories")
+    .then((response)=> response.json())
+    .then((data)=>setAccessories(data))
+    .catch(()=>{
+      "Erreur lors du chargement";
+    });
+  },[]);
+
+  console.log(accessories);
 
   // Step 3: get all accessories
 
@@ -68,7 +81,7 @@ function CupcakeList() {
           </select>
         </label>
       </form>
-         <ul className="cupcake-list" id="cupcake-list">
+      <ul className="cupcake-list" id="cupcake-list">
         {cupcakes.map((c) => (
           <li key={c.id}>
             <Cupcake data={c} />
