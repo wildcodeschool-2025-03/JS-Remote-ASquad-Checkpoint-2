@@ -16,6 +16,12 @@ type AccessoriesType = {
   name: string;
   slug: string;
 };
+
+type SelectedAccessoryType = {
+  target: {
+    value: string;
+  };
+};
 /* ************************************************************************* */
 /*
  const sampleCupcakes: CupcakeArray = [
@@ -72,8 +78,23 @@ function CupcakeList() {
       .then((data) => setAccessories(data))
       .then((error) => console.log(`Accessories fetch Error: ${error}`));
   }, []);
-  console.log("access", accessories);
+  //console.log("access", accessories);
+
   // Step 5: create filter state
+  const [filteredAccessory, setFilteredAccessory] = useState("");
+
+  const handleChange = (e: SelectedAccessoryType) => {
+    setFilteredAccessory(e.target.value);
+  };
+  console.log(filteredAccessory);
+
+  const filteredCupkakesArray = cupCakes?.filter((c) =>
+    c.accessory
+      .trim()
+      .toLowerCase()
+      .includes(filteredAccessory.trim().toLowerCase()),
+  );
+  console.log("filtered: ", filteredCupkakesArray);
 
   return (
     <>
@@ -82,11 +103,11 @@ function CupcakeList() {
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select id="cupcake-select">
+          <select id="cupcake-select" onChange={handleChange}>
             <option value="">---</option>
             {/* Step 4: add an option for each accessory */}
             {accessories?.map((a) => (
-              <option key={a.id} value="">
+              <option key={a.id} value={a.slug}>
                 {a.name}
               </option>
             ))}
@@ -96,7 +117,7 @@ function CupcakeList() {
       <ul className="cupcake-list" id="cupcake-list">
         {/* Step 2: repeat this block for each cupcake */}
         <li className="cupcake-item">
-          {cupCakes?.map((c) => (
+          {filteredCupkakesArray?.map((c) => (
             <Cupcake key={c.id} data={c} />
           ))}
           {/* Step 5: filter cupcakes before repeating */}
