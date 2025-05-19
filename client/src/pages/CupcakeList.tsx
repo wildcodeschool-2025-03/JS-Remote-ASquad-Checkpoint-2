@@ -16,8 +16,14 @@ function CupcakeList() {
     color3: string;
     name: string;
   };
+  type Accessories = {
+    id: number;
+    name: string;
+    slug: string;
+  };
 
   const [cupcakes, setCupcakes] = useState<Cupcake[]>([]);
+  const [accessories, setAccessories] = useState<Accessories[]>([]);
 
   useEffect(() => {
     const fetchCupcakes = async () => {
@@ -33,12 +39,20 @@ function CupcakeList() {
 
     fetchCupcakes();
   }, []);
+  useEffect(() => {
+    const fetchCupcakes = async () => {
+      try {
+        const response = await fetch("http://localhost:3310/api/accessories");
+        const data = await response.json();
+        console.info("Accessories fetched:", data);
+        setAccessories(data);
+      } catch (error) {
+        console.error("Failed to fetch accessoires:", error);
+      }
+    };
 
-  // Step 1: get all cupcakes
-
-  // Step 3: get all accessories
-
-  // Step 5: create filter state
+    fetchCupcakes();
+  }, []);
 
   return (
     <>
@@ -49,12 +63,16 @@ function CupcakeList() {
           Filter by{" "}
           <select id="cupcake-select">
             <option value="">---</option>
-            {/* Step 4: add an option for each accessory */}
+            {accessories.map((accessory) => (
+              <option key={accessory.id} value={accessory.id}>
+                {" "}
+                {accessory.name}
+              </option>
+            ))}
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: Render a card for each cupcake */}
         {cupcakes.map((cupcake) => (
           <li key={cupcake.id} className="cupcake-card">
             <Cupcake data={cupcake} />
