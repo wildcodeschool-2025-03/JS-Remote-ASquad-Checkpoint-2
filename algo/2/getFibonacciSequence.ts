@@ -29,8 +29,6 @@ function getFibonacciSequence(size: number): number[] {
     fibonacci.push(next);
   }
 
-
-
   return fibonacci;
 }
 
