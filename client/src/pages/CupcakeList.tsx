@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
 /* ************************************************************************* */
@@ -34,8 +35,25 @@ const sampleCupcakes: CupcakeArray = [
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
+type data = {
+  id: number;
+  name: string;
+  accessory_id: number;
+  accessory: string;
+  color1: string;
+  color2: string;
+  color3: string;
+};
 
 function CupcakeList() {
+  const [list, setList] = useState<data[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3310/api/cupcakes")
+      .then((response) => response.json())
+      .then((data) => setList(data))
+      .catch((error) => console.log(error));
+  }, []);
   // Step 1: get all cupcakes
 
   // Step 3: get all accessories
@@ -45,6 +63,21 @@ function CupcakeList() {
   return (
     <>
       <h1>My cupcakes</h1>
+
+      {list.map((l) => (
+        <Cupcake
+          key={l.id}
+          data={{
+            id: l.id,
+            accessory_id: l.accessory,
+            accessory: l.accessory,
+            color1: l.color1,
+            color2: l.color2,
+            color3: l.color3,
+            name: l.name,
+          }}
+        />
+      ))}
       <form className="center">
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
