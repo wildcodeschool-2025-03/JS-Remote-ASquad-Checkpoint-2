@@ -1,4 +1,8 @@
+import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
+
+
+
 
 /* ************************************************************************* */
 const sampleCupcakes: CupcakeArray = [
@@ -34,15 +38,43 @@ const sampleCupcakes: CupcakeArray = [
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
+interface Cupcake {
+  id: number,
+  accessoryId: number,
+  accessory: string,
+  color1: string,
+
+};
+
 
 function CupcakeList() {
   // Step 1: get all cupcakes
+  const [, setCupcakes] = useState<CupcakeArray[]>([]);
 
+
+
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: import.meta.env.VITE_API_URL,
+      },
+    };
+    fetch("http://localhost:3310/api/cupcakes", options)
+      .then(res => res.json())
+      .then(data => {
+        setCupcakes(data.results);
+        console.info('Serveur lancé sur http://localhost:3310');
+      })
+  }, []);
   // Step 3: get all accessories
 
   // Step 5: create filter state
 
   return (
+
     <>
       <h1>My cupcakes</h1>
       <form className="center">
