@@ -10,6 +10,12 @@ type CupcakeType = {
   color3: string;
   name: string;
 };
+
+type AccessoriesType = {
+  id: number;
+  name: string;
+  slug: string;
+};
 /* ************************************************************************* */
 /*
  const sampleCupcakes: CupcakeArray = [
@@ -48,17 +54,25 @@ type CupcakeType = {
 
 function CupcakeList() {
   const [cupCakes, setCupcakes] = useState<CupcakeType[] | null>([]);
+  const [accessories, setAccessories] = useState<AccessoriesType[] | null>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
       .then((response) => response.json())
       .then((data) => setCupcakes(data))
-      .then((error) => console.log(`Error: ${error}`));
+      .then((error) => console.log(`Cupcakes fetch Error: ${error}`));
   }, []);
 
-  console.log(cupCakes);
-  // Step 3: get all accessories
+  console.log("cakes", cupCakes);
 
+  // Step 3: get all accessories
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((response) => response.json())
+      .then((data) => setAccessories(data))
+      .then((error) => console.log(`Accessories fetch Error: ${error}`));
+  }, []);
+  console.log("access", accessories);
   // Step 5: create filter state
 
   return (
@@ -76,11 +90,11 @@ function CupcakeList() {
       </form>
       <ul className="cupcake-list" id="cupcake-list">
         {/* Step 2: repeat this block for each cupcake */}
-        {/* Step 5: filter cupcakes before repeating */}
         <li className="cupcake-item">
           {cupCakes?.map((c) => (
             <Cupcake key={c.id} data={c} />
           ))}
+          {/* Step 5: filter cupcakes before repeating */}
         </li>
         {/* end of block */}
       </ul>
