@@ -49,6 +49,9 @@ type AccessoryArray = { id: number; name: string; slug: string };
 function CupcakeList() {
   const [list, setList] = useState<data[]>([]);
   const [accessories, setAccessories] = useState<AccessoryArray[]>([]);
+  const filter = accessories.map((c) => c.name);
+  const uniqueSet = new Set(filter);
+  const filterCupcake = [...uniqueSet];
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -75,31 +78,25 @@ function CupcakeList() {
     <>
       <h1>My cupcakes</h1>
 
-      {list.map((l) => (
-        <Cupcake
-          key={l.id}
-          data={{
-            id: l.id,
-            accessory_id: l.accessory,
-            accessory: l.accessory,
-            color1: l.color1,
-            color2: l.color2,
-            color3: l.color3,
-            name: l.name,
-          }}
-        />
-      ))}
-
       <form className="center">
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select id="cupcake-select">
+          <select
+            id="cupcake-select"
+            onChange={(e) =>
+              setList(
+                e.target.value
+                  ? list.filter((s) => s.accessory.includes(e.target.value))
+                  : list
+              )
+            }
+          >
             <option value="">---</option>
             {/* Step 4: add an option for each accessory */}
-            {accessories.map((a) => (
-              <option value="name" key={a.id}>
-                {a.name}
+            {filterCupcake.map((a) => (
+              <option value={a} key={a}>
+                {a}
               </option>
             ))}
           </select>
@@ -110,7 +107,21 @@ function CupcakeList() {
         {/* Step 5: filter cupcakes before repeating */}
         <li className="cupcake-item">
           <Cupcake data={sampleCupcakes[0]} />
-        </li>
+        </li>{" "}
+        {list.map((l) => (
+          <Cupcake
+            key={l.id}
+            data={{
+              id: l.id,
+              accessory_id: l.accessory,
+              accessory: l.accessory,
+              color1: l.color1,
+              color2: l.color2,
+              color3: l.color3,
+              name: l.name,
+            }}
+          />
+        ))}
         {/* end of block */}
       </ul>
     </>
