@@ -1,7 +1,8 @@
-import Cupcake from "../components/Cupcake";
 import { useEffect, useState } from "react";
+import Cupcake from "../components/Cupcake";
 
 /* ************************************************************************* */
+
 const sampleCupcakes: CupcakeArray = [
   {
     id: 10,
@@ -37,7 +38,7 @@ const sampleCupcakes: CupcakeArray = [
 /* ************************************************************************* */
 
 function CupcakeList() {
-  const [cupcakes, setCupcakes] = useState<[]>([]);
+  const [cupcakes, setCupcakes] = useState<Cupcake[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -48,35 +49,39 @@ function CupcakeList() {
       });
   }, []);
 
-  console.log(cupcakes)
+  console.log(cupcakes);
 
-// Step 3: get all accessories
+  // Step 3: get all accessories
 
-// Step 5: create filter state
+  // Step 5: create filter state
 
-return (
-  <>
-    <h1>My cupcakes</h1>
-    <form className="center">
-      <label htmlFor="cupcake-select">
-        {/* Step 5: use a controlled component for select */}
-        Filter by{" "}
-        <select id="cupcake-select">
-          <option value="">---</option>
-          {/* Step 4: add an option for each accessory */}
-        </select>
-      </label>
-    </form>
-    <ul className="cupcake-list" id="cupcake-list">
-      {/* Step 2: repeat this block for each cupcake */}
-      {/* Step 5: filter cupcakes before repeating */}
-      <li className="cupcake-item">
-        <Cupcake data={sampleCupcakes[0]} />
-      </li>
-      {/* end of block */}
-    </ul>
-  </>
-);
-  }
+  return (
+    <>
+      <h1>My cupcakes</h1>
+      <form className="center">
+        <label htmlFor="cupcake-select">
+          {/* Step 5: use a controlled component for select */}
+          Filter by{" "}
+          <select id="cupcake-select">
+            <option value="">---</option>
+            {/* Step 4: add an option for each accessory */}
+          </select>
+        </label>
+      </form>
+         <ul className="cupcake-list" id="cupcake-list">
+        {cupcakes.map((c) => (
+          <li key={c.id}>
+            <Cupcake data={c} />
+          </li>
+        ))}
+        {/* Step 5: filter cupcakes before repeating */}
+        <li className="cupcake-item">
+          <Cupcake data={sampleCupcakes[0]} />
+        </li>
+        {/* end of block */}
+      </ul>
+    </>
+  );
+}
 
 export default CupcakeList;
