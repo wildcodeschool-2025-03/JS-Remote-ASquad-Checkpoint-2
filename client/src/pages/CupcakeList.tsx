@@ -39,7 +39,7 @@ const sampleCupcakes: CupcakeArray = [
 function CupcakeList() {
   // Step 1: get all cupcakes
 
-  const [cupcakes, setCupcakes] = useState([]);
+  const [cupcakes, setCupcakes] = useState<Cupcake[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -69,6 +69,11 @@ function CupcakeList() {
       </form>
       <ul className="cupcake-list" id="cupcake-list">
         {/* Step 2: repeat this block for each cupcake */}
+        <ul>
+          {cupcakes.map((cupcake) => (
+            <Cupcake key={cupcake.id} data={cupcake} />
+          ))}
+        </ul>
         {/* Step 5: filter cupcakes before repeating */}
         <li className="cupcake-item">
           <Cupcake data={sampleCupcakes[0]} />
