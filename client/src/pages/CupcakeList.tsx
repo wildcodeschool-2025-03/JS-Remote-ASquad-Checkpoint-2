@@ -47,6 +47,7 @@ function CupcakeList() {
 
   const [cupcakes, setCupcakes] = useState<Cupcake[] | null>(null);
   const [accessories, setAccessories] = useState<Accessory[] | null>([]);
+  const [selectedAccessory, setSelectedAccessory] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -85,11 +86,14 @@ function CupcakeList() {
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select id="cupcake-select">
+          <select 
+            id="cupcake-select"
+            onChange={(e) => setSelectedAccessory(e.target.value)}
+          >
             <option value="">---</option>
             {accessories ? (
               accessories.map((a) => (
-                <option key={a.id} value={a.name}>
+                <option key={a.id} value={a.slug}>
                   {a.name}
                 </option>
               ))
@@ -102,7 +106,12 @@ function CupcakeList() {
       </form>
       <ul className="cupcake-list" id="cupcake-list">
         {cupcakes ? (
-          cupcakes.map((c) => <Cupcake key={c.id} data={c} />)
+          cupcakes
+            .filter(
+              (c) =>
+                c.accessory === selectedAccessory || selectedAccessory === "",
+            )
+            .map((c) => <Cupcake key={c.id} data={c} />)
         ) : (
           <h2>Loading, please wait a second ..</h2>
         )}
