@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Cupcake from "../components/Cupcake";
 
 /* ************************************************************************* */
@@ -31,12 +32,38 @@ const sampleCupcakes: CupcakeArray = [
   },
 ];
 
+type cupcakesType = {
+  id: number;
+  accessory_id: string;
+  accessory: string;
+  color1: string;
+  color2: string;
+  color3: string;
+  name: string;
+};
+
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
 
 function CupcakeList() {
   // Step 1: get all cupcakes
+
+  const [cupcakes, setCupcakes] = useState<cupcakesType[] | null>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3310/api/cupcakes")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data: cupcakesType[]) => setCupcakes(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  console.info(cupcakes);
 
   // Step 3: get all accessories
 
