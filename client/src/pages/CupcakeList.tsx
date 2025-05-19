@@ -49,7 +49,7 @@ function CupcakeList() {
       .then((data) => setCupcakes(data))
       .catch((err) => console.error(err));
   }, []);
-  console.info(cupcakes);
+  //console.info(cupcakes);
 
   // Step 3: get all accessories
   const [accessories, setAccessories] = useState<AccessoryArray>([]);
@@ -60,37 +60,43 @@ function CupcakeList() {
       .then((data) => setAccessories(data))
       .catch((err) => console.error(err));
   }, []);
-  console.info(accessories);
+  //console.info(accessories);
 
   // Step 5: create filter state
+  const [selected, setSelected] = useState("");
+ 
 
   return (
     <>
       <h1>My cupcakes</h1>
       <form className="center">
         <label htmlFor="cupcake-select">
-          {/* Step 5: use a controlled component for select */}
+          {/* Step 5: use a controlled component for select */
+          }
           Filter by{" "}
-          <select id="cupcake-select">
+          <select id="cupcake-select"
+          value={selected}
+          onChange={(e) => {setSelected(e.target.value)}}
+          >
             <option value="">---</option>
             {
               /* Step 4: add an option for each accessory */
               accessories.map((a) => (
-                <option key={a.id} value={a.id}>{a.name}</option>
+                <option key={a.id} value={a.id}>
+                  {a.name}
+                </option>
               ))
             }
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {
-          /* Step 2: repeat this block for each cupcake */
-          cupcakes.map((c) => (
-            <Cupcake key={c.id} data={c} />
-          ))
-        }
+    
 
-        {/* Step 5: filter cupcakes before repeating */}
+        {/* Step 5: filter cupcakes before repeating */
+        selected? cupcakes.filter((c)=> c.accessory_id ===selected).map((c) => (
+          <Cupcake key={c.id} data={c}/> )) : cupcakes.map((c) => (
+          <Cupcake key={c.id} data={c}/> ))}
         <li className="cupcake-item">
           <Cupcake data={sampleCupcakes[0]} />
         </li>
