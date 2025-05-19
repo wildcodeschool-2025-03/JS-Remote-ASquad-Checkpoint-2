@@ -32,6 +32,12 @@ const sampleCupcakes: CupcakeArray = [
   },
 ];
 
+type Accessory = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
 /* you can use sampleCupcakes if you're stucked on step 1 */
 /* if you're fine with step 1, just ignore this ;) */
 /* ************************************************************************* */
@@ -40,6 +46,7 @@ function CupcakeList() {
   // Step 1: get all cupcakes
 
   const [cupcakes, setCupcakes] = useState<Cupcake[] | null>(null);
+  const [accessories, setAccessories] = useState<Accessory[] | null>([]);
 
   useEffect(() => {
     fetch("http://localhost:3310/api/cupcakes")
@@ -53,7 +60,19 @@ function CupcakeList() {
       .catch((error) => console.error(error));
   }, []);
 
-  console.info(cupcakes);
+  useEffect(() => {
+    fetch("http://localhost:3310/api/accessories")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data: Accessory[]) => setAccessories(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  console.info(accessories);
 
   // Step 3: get all accessories
 
@@ -74,10 +93,7 @@ function CupcakeList() {
       </form>
       <ul className="cupcake-list" id="cupcake-list">
         {cupcakes ? (
-          cupcakes.map((c) =>(
-            <Cupcake key={c.id} data={c}
-            />
-          ))
+          cupcakes.map((c) => <Cupcake key={c.id} data={c} />)
         ) : (
           <h2>Loading, please wait a second ..</h2>
         )}
